@@ -126,4 +126,29 @@ if(config.minSpeed && config.maxSpeed){
 3、paint
  ctx.drawImage(this.frame,x,y);
 ```
+###2.创建飞机
+```javascript
+   var enemies = []; 保存所有飞机的数组
+   数组中的第一个位置，永远都是大飞机
+   var lastTime = 0;
+   var interval = 800;
+   //创建飞机的全局函数，由RUNNING时调用
+   function componentEnter(){
+	if(时间判断){
+		//控制飞机出现的数量
+		//使用0-9的随机数控制
+		//0-7 :  出现的都是小飞机
+		  new Enemy(E1)
+		  enemies[enemies.length] = new Enemy(E1);
+		//8:出现的就是中型飞机
+		  new Enemy(E2)
+		//9:可能出现的是大飞机
+		if(enemies[0].type != 3){
+		  //创建大飞机，并且保存进第一个位置
+		  enemies.splice(0,0,new Enemy(E3));
+		}
+		lastTime = new Date().getTime();
+	}
+   }
+```
 
