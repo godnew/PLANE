@@ -50,7 +50,7 @@ enemy1_down（n）.png
 ###4.设计元素
    1、数据对象：只负责封装基本数据   例：天空-宽度高度移动速度等等 var SKY={width:480,height:600,speed:20}
 
-   2. 业务对象：负责业务逻辑的计算   例：处理天空运动var Sky=function(SKY){...}
+   2、业务对象：负责业务逻辑的计算   例：处理天空运动var Sky=function(SKY){...}
 ##具体实现
 ###1.三种敌机（Enermy）
    E1:小飞机
