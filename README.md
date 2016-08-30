@@ -44,74 +44,11 @@ enemy1_down（n）.png
 ###3.计时器 setInterval
    整个游戏很多的东西都在使用计时器（英雄、敌机、子弹、天空等等），因此设置这么多计时器是不行的，这里想到了只用一个计时器来控制所有的模块。
 
-   这里有个问题问题：如何控制图像组件的速度
+   这里有个问题：如何控制图像组件的速度
 
    解决:计时器固定刷新频率 : 1000 / 100，每一个图像组件都有自己的速度 （20 --> 1000 / 20），让计时器测量图像组件是否到达运动时间，如果到达则运动，否则不动。
 ###4.设计元素
-   1. 数据对象：只负责封装基本数据   例：天空-宽度高度移动速度等等 var SKY={width:480,height:600,speed:20}
+   1、数据对象：只负责封装基本数据   例：天空-宽度高度移动速度等等 var SKY={width:480,height:600,speed:20}
 
-   2. 业务对象：负责业务逻辑的计算   例：处理天空运动var Sky=function(SKY){...}
-##具体实现
-###1.三种敌机（Enermy）
-   E1:小飞机
-   E2:中型飞机
-   E3:大型飞机
-   飞机图像数组
-   var e1 = [];//装载从开始到销毁的所有状态的图片
-   注意:e1与e2 一副基本图像，多幅销毁图像
-        e3:两幅基本图像，多幅销毁图像
-   ####三种飞机的数据对象
-       E1:
-         type:类型 1-3 分别表示不同类型的飞机 : 1
-         score:分数 : 1
-         frames:对应的图像数组 :e1
-         baseFrameCount:基本图像帧数 : 1
-         life:生命，几枪被击落 :1
-         minSpeed:最小速度 :70
-         maxSpeed:最大速度 :100
-         width:宽度
-         height:高度
-      E2:
-         type:类型 1-3 分别表示不同类型的飞机
-         score:分数
-         frames:对应的图像数组
-         baseFrameCount:基本图像帧数 :1
-         life:生命，几枪被击落
-         minSpeed:最小速度 :50
-         maxSpeed:最大速度 :70
-         width:宽度
-         height:高度
-      E3:
-         type:类型 1-3 分别表示不同类型的飞机
-         score:分数
-         frames:对应的图像数组
-         baseFrameCount:基本图像帧数 :2
-         life:生命，几枪被击落
-         speed:10
-         width:宽度
-         height:高度
-   ####三种飞机的业务对象
-    属性:
-      1、speed:
-           //判断是小飞机、中型飞机 还是大飞机
-           ```javascript
-           if(config.minSpeed && config.maxSpeed){
-               this.speed = Math.floor((Math.random() * (config.maxSpeed-config.minSpeed)) + config.minSpeed);
-           }else {
-            this.speed = config.speed;
-           }
-           ```
-      2、x
-           当前飞机的横坐标,随机，不能再屏幕中出现一半
-      3、y
-           当前飞机的纵坐标
-           -config.height
-    方法
-      1、step
-         1）、基本帧的切换
-              借助config.baseFrameCount 的值进行切换
-         2）、控制飞机的移动 : y++
-      2、move
-         y ++
-      3、paint
-         ctx.drawImage(this.frame,x,y);
+   2、业务对象：负责业务逻辑的计算   例：处理天空运动var Sky=function(SKY){...}
+
