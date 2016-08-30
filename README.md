@@ -53,15 +53,15 @@ enemy1_down（n）.png
    2、业务对象：负责业务逻辑的计算   例：处理天空运动var Sky=function(SKY){...}
 ##具体实现
 ###1.三种敌机（Enermy）
-   E1:小飞机
-   E2:中型飞机
-   E3:大型飞机
-   飞机图像数组
-   var e1 = [];//装载从开始到销毁的所有状态的图片
-   注意:e1与e2 一副基本图像，多幅销毁图像
+E1:小飞机
+E2:中型飞机
+E3:大型飞机
+飞机图像数组
+var e1 = [];//装载从开始到销毁的所有状态的图片
+注意:e1与e2 一副基本图像，多幅销毁图像
         e3:两幅基本图像，多幅销毁图像
 ####三种飞机的数据对象
-       E1:
+ E1:
        ```
          type:类型 1-3 分别表示不同类型的飞机 : 1
          score:分数 : 1
@@ -73,7 +73,7 @@ enemy1_down（n）.png
          width:宽度
          height:高度
        ```
-      E2:
+E2:
       ```
          type:类型 1-3 分别表示不同类型的飞机
          score:分数
@@ -85,7 +85,7 @@ enemy1_down（n）.png
          width:宽度
          height:高度
       ```
-      E3:
+ E3:
       ```
          type:类型 1-3 分别表示不同类型的飞机
          score:分数
@@ -96,9 +96,9 @@ enemy1_down（n）.png
          width:宽度
          height:高度
       ```
-   ####三种飞机的业务对象
-    属性:
-      1、speed: //判断是小飞机、中型飞机 还是大飞机
+####三种飞机的业务对象
+#####属性:
+1、speed: //判断是小飞机、中型飞机 还是大飞机
            ```javascript
            if(config.minSpeed && config.maxSpeed){
                this.speed = Math.floor((Math.random() * (config.maxSpeed-config.minSpeed)) + config.minSpeed);
@@ -106,20 +106,20 @@ enemy1_down（n）.png
             this.speed = config.speed;
            }
            ```
-      2、x
-           当前飞机的横坐标,随机，不能再屏幕中出现一半
-      3、y
-           当前飞机的纵坐标
-           -config.height
-    方法
-    ```
-      1、step
-         1）、基本帧的切换
-              借助config.baseFrameCount 的值进行切换
-         2）、控制飞机的移动 : y++
-      2、move
-         y ++
-      3、paint
-         ctx.drawImage(this.frame,x,y);
-    ```
+2、x
+当前飞机的横坐标,随机，不能再屏幕中出现一半
+3、y
+当前飞机的纵坐标
+-config.height
+#####方法
+```
+  1、step
+     1）、基本帧的切换
+          借助config.baseFrameCount 的值进行切换
+     2）、控制飞机的移动 : y++
+  2、move
+     y ++
+  3、paint
+     ctx.drawImage(this.frame,x,y);
+```
 
