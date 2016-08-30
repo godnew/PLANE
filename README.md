@@ -60,8 +60,9 @@ enemy1_down（n）.png
    var e1 = [];//装载从开始到销毁的所有状态的图片
    注意:e1与e2 一副基本图像，多幅销毁图像
         e3:两幅基本图像，多幅销毁图像
-   ####三种飞机的数据对象
+####三种飞机的数据对象
        E1:
+       ```
          type:类型 1-3 分别表示不同类型的飞机 : 1
          score:分数 : 1
          frames:对应的图像数组 :e1
@@ -71,7 +72,9 @@ enemy1_down（n）.png
          maxSpeed:最大速度 :100
          width:宽度
          height:高度
+       ```
       E2:
+      ```
          type:类型 1-3 分别表示不同类型的飞机
          score:分数
          frames:对应的图像数组
@@ -81,7 +84,9 @@ enemy1_down（n）.png
          maxSpeed:最大速度 :70
          width:宽度
          height:高度
+      ```
       E3:
+      ```
          type:类型 1-3 分别表示不同类型的飞机
          score:分数
          frames:对应的图像数组
@@ -90,10 +95,10 @@ enemy1_down（n）.png
          speed:10
          width:宽度
          height:高度
+      ```
    ####三种飞机的业务对象
     属性:
-      1、speed:
-           //判断是小飞机、中型飞机 还是大飞机
+      1、speed: //判断是小飞机、中型飞机 还是大飞机
            ```javascript
            if(config.minSpeed && config.maxSpeed){
                this.speed = Math.floor((Math.random() * (config.maxSpeed-config.minSpeed)) + config.minSpeed);
@@ -107,6 +112,7 @@ enemy1_down（n）.png
            当前飞机的纵坐标
            -config.height
     方法
+    ```
       1、step
          1）、基本帧的切换
               借助config.baseFrameCount 的值进行切换
@@ -115,4 +121,5 @@ enemy1_down（n）.png
          y ++
       3、paint
          ctx.drawImage(this.frame,x,y);
+    ```
 
