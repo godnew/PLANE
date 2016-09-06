@@ -1,6 +1,3 @@
-/**
- * Created by nhy on 2016/8/21.
- */
 //定义宽和高
 var WIDTH=480,HEIGHT=650;
 var score = 0,life=3;
@@ -147,11 +144,16 @@ var enemies = [];
 //业务对象
 
 var Enemy = function(config){
+    this.down = false;//是否播放爆破状态,默认为否
+    this.canDelete = false;//是否删除当前飞机,默认为否
+    this.life = config.life;//敌人的生命力
     this.score = config.score;//分数
     this.frames = config.frames;//图像列表
     this.frame=null;//当前显示的图像
     this.frameIndex = 0;//当前显示的图像索引累加值
     this.baseFrameCount=config.baseFrameCount;
+    this.width = config.width;
+    this.height = config.height;
     //横纵坐标
     this.x = Math.ceil(Math.random()*(WIDTH - config.width));
     this.y = -config.height;
@@ -179,11 +181,22 @@ var Enemy = function(config){
 
     this.step=function(){
         if(this.timeInterval()){
-            //基本图像切换
-            this.frame = this.frames[this.frameIndex % this.baseFrameCount];
-            this.frameIndex ++;
-            //飞机移动
-            this.move();
+            if(this.down){
+                //播放爆破图像
+                //已经确定this.frameIndex = this.baseFrameCount;
+                if(this.frameIndex ==this.frames.length){
+                    this.canDelete = true;
+                } else {
+                    this.frame = this.frames[this.frameIndex];
+                    this.frameIndex ++;
+                }
+            }else{
+                //播放基本图像
+                this.frame = this.frames[this.frameIndex % this.baseFrameCount];
+                this.frameIndex ++;
+                //飞机移动
+                this.move();
+            }
         }
     }
 
@@ -205,6 +218,40 @@ var Enemy = function(config){
         }
         return false;
     }
+
+    /**
+     * 判断敌人是否与其他物体碰撞
+     * c：c可以是英雄，可以是子弹
+     */
+    this.hit = function(c){
+        //c的中心点坐标
+        var cX = c.x + c.width / 2;
+        var cY = c.y + c.height / 2;
+
+        var leftStart = this.x - c.width / 2;
+        var leftEnd = this.x + this.width + c.width / 2;
+
+        var topStart = this.y - c.height / 2;
+        var topEnd = this.y + this.height + c.height / 2;
+
+        var result = leftStart < cX && cX < leftEnd && topStart < cY && cY < topEnd;
+        return result;
+
+    }
+
+    /**
+     * 当敌人飞机与其他元素碰撞时的操作方法
+     */
+    this.duang = function(){
+        //生命的减少
+        this.life --;
+        if(this.life == 0){
+            //切换到爆破状态
+            this.down = true;
+            score += this.score;
+            this.frameIndex = this.baseFrameCount;
+        }
+    }
 }
 
 /**
@@ -216,6 +263,7 @@ var Bullet = function(config,x,y){
     this.frame = config.image;
     this.x = x;
     this.y = y;
+    this.canDelete = false;//是否删除子弹，默认为否
 
     this.move = function(){
         this.y -= 2;
@@ -227,6 +275,13 @@ var Bullet = function(config,x,y){
 
     this.outOfBounds = function(){
         return this.y < 0-this.height;
+    }
+
+    /**
+     * 子弹与敌人飞机碰撞时所做的操作
+     */
+    this.duang = function(){
+        this.canDelete = true;
     }
 }
 
@@ -244,12 +299,26 @@ var Hero = function(config){
     this.x = (WIDTH - this.width) / 2;
     this.y = HEIGHT - this.height - 30;
 
+    this.down=false;
+    this.canDelete = false;
+
     this.step = function(){
         var currentTime = new Date().getTime();
         if(currentTime - this.lastTime >= this.speed){
-            this.frame = this.frames[this.frameIndex % this.baseFrameCount];
-            this.frameIndex ++;
-            this.lastTime = new Date().getTime();
+            if(this.down){
+                //爆破状态
+                if(this.frameIndex == this.frames.length){
+                    this.canDelete = true;
+                }else {
+                    this.frame = this.frames[this.frameIndex];
+                    this.frameIndex ++;
+                }
+            }else{
+                //正常状态
+                this.frame = this.frames[this.frameIndex % this.baseFrameCount];
+                this.frameIndex ++;
+                this.lastTime = new Date().getTime();
+            }
         }
     }
 
@@ -271,6 +340,13 @@ var Hero = function(config){
             //console.log("子弹数量:"+bullets.length);
             this.shootLastTime = new Date().getTime();
         }
+    }
+    /**
+     * 英雄与敌人碰撞后的操作
+     */
+    this.duang = function(){
+        this.down = true;
+        this.frameIndex = this.baseFrameCount;
     }
 }
 
@@ -360,19 +436,61 @@ var sky = new Sky(SKY);
 var loading = new Loading(LOADING);
 var hero = new Hero(HERO);
 
+/**
+ * 检查 敌人是否与子弹、英雄碰撞
+ */
+function checkHit(){
+    for(var i=0;i<enemies.length;i++){
+        var enemy = enemies[i];
+        if(enemy.down || enemy.canDelete){
+            continue;
+        }
+
+        //与子弹相比较
+        for(var j=0;j<bullets.length;j++){
+            var bullet = bullets[j];
+            //进行比较
+            if(enemy.hit(bullet)){
+                enemy.duang();
+                bullet.duang();
+            }
+        }
+
+        //判断与英雄比较
+        if(enemy.down || enemy.canDelete){
+            continue;
+        }
+        if(enemy.hit(hero)){
+            enemy.duang();
+            hero.duang();
+        }
+    }
+}
+
 //删除多余组件
 function deleteComponent(){
     //删除超出下边界的小飞机
     for(var i=0;i<enemies.length;i++){
-        if(enemies[i].outOfBounds()){
+        if(enemies[i].outOfBounds() || enemies[i].canDelete){
             enemies.splice(i,1);
         }
     }
 
     //删除超出上边界的子弹
     for(var i=0;i<bullets.length;i++){
-        if(bullets[i].outOfBounds()){
+        if(bullets[i].outOfBounds() || bullets[i].canDelete){
             bullets.splice(i,1);
+        }
+    }
+
+    //判断英雄是否需要被删除
+    if(hero.canDelete){
+        life --;//减少生命
+        if(life == 0){
+            //GAME_OVER
+            state = GAME_OVER;
+        }else{
+            hero = new Hero(HERO);
         }
     }
 }
@@ -473,15 +591,13 @@ setInterval(function(){
             hero.step();
             hero.paint(ctx);
             hero.shoot();
+            checkHit();
             //添加新组件(敌人小飞机)
             componentEnter();
             stepComponent();
             deleteComponent();
             //绘制所有的组件
             paintComponent();
-
-            //打印enemies的长度
-            console.log(bullets.length);
             break;
         case PAUSE:
             //暂停
@@ -492,7 +608,9 @@ setInterval(function(){
             break;
         case GAME_OVER:
             //游戏结束
+            ctx.font = "bold 24px 微软雅黑";
+            var width =ctx.measureText("GAME_OVER").width;
+            ctx.fillText("GAME_OVER",(WIDTH-width)/2,300);
             break;
     }
 },1000/100);
-
