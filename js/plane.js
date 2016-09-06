@@ -1,5 +1,5 @@
 //定义宽和高
-var WIDTH=480,HEIGHT=650;
+var WIDTH=480,HEIGHT=600;
 var score = 0,life=3;
 //定义状态
 var START = 0;
@@ -129,7 +129,7 @@ canvas.onmouseover = function(e){
 }
 
 //数据对象
-var SKY = {image:bg,width:480,height:650,speed:20};
+var SKY = {image:bg,width:480,height:600,speed:20};
 var LOADING = {frames:l,width:186,height:38,x:0,y:HEIGHT-38,speed:5};
 var HERO = {frames:h,baseFrameCount:2,width:99,height:124,speed:20};
 var BULLET = {image:b,width:9,height:21};
