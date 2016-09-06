@@ -151,4 +151,69 @@ if(config.minSpeed && config.maxSpeed){
 	}
    }
 ```
+###3.移除超出边界的敌人飞机
+```javascript
+function Enemy(){
 
+  this.outOfBounds=function(){
+	if(this.y >= HEIGHT){
+		return true;
+	}
+	return false;
+  }
+}
+
+for(var i=0;i<enemies.length;i++){
+	if(enemies[i].outOfBounds()){
+		enemies.splice(i,1);
+	}
+
+}
+```
+###4.给敌人业务对象中添加业务方法
+   /**  
+    * 检查敌人飞机(this)是否与其他元素进行相撞  
+    * c:其他元素 --> Hero,Bullet  
+    * 判断c的中心点是否出现在指定区域中  
+    * c的中心点:  
+    *    x:c.x + c.width / 2  
+    *    y:c.y + c.heght / 2  
+    * 横向范围:this.x - c.width / 2 ~ this.x+this.width+c.width/2  
+    * 纵向范围:this.y - c.height /2 ~ this.y + this.height + c.height / 2  
+    */  
+```javascript
+   function hit = function(c){
+	//相撞返回true
+	//否则返回false
+   }
+```
+###5.创建全局判断每个敌人是否与其他元素碰撞的方法
+```javascript
+function checkHit(){
+	//遍历所有的敌人飞机
+	for(var i=0;i<enemies.length;i++){
+		var enemy = enemies[i];
+		//enemy是否与子弹相撞
+
+		//enemy是否与英雄相撞
+		if(enemy.hit(hero)){
+			//enemy与英雄相撞
+		}
+	}
+   }
+```
+###6.撞击后
+为英雄、敌人飞机添加属性  
+this.down : 是否爆破,默认为false  
+一旦this.down为true时  
+英雄，敌人飞机的 frame 立即改为爆破的几幅图像  
+英雄this.down后判断还有几条命。如果>0 ,创建英雄对象接着玩  
+如果 = 0 ---> state = GAME_OVER  
+所有的爆破图像显示完毕后，this.canDelete=true  
+```javascript
+   this.canDelete:是否删除，默认为false
+      function deleteComponent(){
+	//判断边界移除飞机
+	//判断canDelete属性删除飞机
+      }
+```
