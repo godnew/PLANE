@@ -220,4 +220,5 @@ this.down : 是否爆破,默认为false
 ![](img/hit.png)  
 这张图所画的是本游戏的核心，包含英雄和敌机碰撞以及子弹打中敌机、英雄中弹都是根据此图来的，请大家仔细研究下此图。  
 以上就是整个游戏的核心代码。  
+演示地址：[进入游戏](https://godnew.github.io/PLANE)  
 具体代码(全程注释)在github上了，地址是：[https://github.com/godnew/PLANE](https://github.com/godnew/PLANE)，欢迎star。
